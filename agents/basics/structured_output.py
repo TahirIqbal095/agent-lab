@@ -9,11 +9,11 @@ load_dotenv()
 
 model=os.getenv("AZURE_DEPLOYED_MODEL")
 api_key = os.getenv("AZURE_OPENAI_API_KEY")
-api_version = os.getenv("API-VERSION")
 azure_endpoint= os.getenv("AZURE_ENDPOINT")
+api_version = os.getenv("API_VERSION")
 
 if not azure_endpoint or not model :
-    raise ValueError(f"The value of azure endpoint in {azure_endpoint}")
+    raise ValueError("The value of azure endpoint or model is not set in the environment variables. Please check your .env file.")
 
 client = AzureOpenAI(
     api_key=api_key,
@@ -52,6 +52,3 @@ if parsed_event is not None:
     print(parsed_event.date)
     print(parsed_event.participants)
     
-
-
-

@@ -1,27 +1,14 @@
-import os
 from openai import AzureOpenAI
-from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from openai.types.chat import ChatCompletionMessageParam, ChatCompletionToolParam
+from env_setup import env_vars
 import requests
 import json
 
-load_dotenv()
-
-# ---------------setup your env-arguments--------------------
-
-model = os.getenv("AZURE_DEPLOYED_MODEL")
-api_key = os.getenv("AZURE_OPENAI_API_KEY")
-azure_endpoint = os.getenv("AZURE_ENDPOINT")
-api_version = os.getenv("API_VERSION")
-
-if not azure_endpoint or not model:
-    raise ValueError(
-        "The value of azure endpoint or model is not set in the environment variables. Please check your .env file."
-    )
-
 client = AzureOpenAI(
-    api_key=api_key, api_version=api_version, azure_endpoint=azure_endpoint
+    api_key=env_vars["api_key"],
+    api_version=env_vars["api_version"],
+    azure_endpoint=env_vars["azure_endpoint"],
 )
 
 
@@ -76,7 +63,7 @@ tools: list[ChatCompletionToolParam] = [
 
 
 completion = client.chat.completions.create(
-    model=model,
+    model=env_vars["model"],
     messages=messages,
     tools=tools,
 )
@@ -136,7 +123,7 @@ class WeatherResponse(BaseModel):
 
 
 final_completion = client.beta.chat.completions.parse(
-    model=model,
+    model=env_vars["model"],
     messages=messages,
     tools=tools,
     response_format=WeatherResponse,

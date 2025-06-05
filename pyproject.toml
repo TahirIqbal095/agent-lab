@@ -8,5 +8,6 @@ dependencies = [
     "dotenv>=0.9.9",
     "ipykernel>=6.29.5",
     "openai>=1.84.0",
+    "pydantic>=2.11.5",
     "requests>=2.32.3",
 ]

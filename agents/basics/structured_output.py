@@ -1,38 +1,27 @@
-import os
 from pydantic import BaseModel
 from openai import AzureOpenAI
-from dotenv import load_dotenv
+from env_setup import env_vars
 
-load_dotenv()
-
-#------------------------setup your env------------------------------
-
-model=os.getenv("AZURE_DEPLOYED_MODEL")
-api_key = os.getenv("AZURE_OPENAI_API_KEY")
-azure_endpoint= os.getenv("AZURE_ENDPOINT")
-api_version = os.getenv("API_VERSION")
-
-if not azure_endpoint or not model :
-    raise ValueError("The value of azure endpoint or model is not set in the environment variables. Please check your .env file.")
 
 client = AzureOpenAI(
-    api_key=api_key,
-    api_version=api_version,
-    azure_endpoint=azure_endpoint
+    api_key=env_vars["api_key"],
+    api_version=env_vars["api_version"],
+    azure_endpoint=env_vars["azure_endpoint"],
 )
 
-#-----------------Define response_format using pydantic------------------
+# -----------------Define response_format using pydantic------------------
+
 
 class CalenderEvent(BaseModel):
     name: str
     date: str
     participants: list[str]
-    
-    
-#-----------------call the model------------------------
+
+
+# -----------------call the model------------------------
 
 completion = client.beta.chat.completions.parse(
-    model=model, 
+    model=env_vars["model"],
     messages=[
         {"role": "system", "content": "Extract the event information."},
         {
@@ -40,10 +29,10 @@ completion = client.beta.chat.completions.parse(
             "content": "Alice and Bob are going to a science fair on Friday.",
         },
     ],
-    response_format=CalenderEvent
+    response_format=CalenderEvent,
 )
 
-#-----------------parse the response-----------------------------
+# -----------------parse the response-----------------------------
 
 parsed_event = completion.choices[0].message.parsed
 
@@ -51,4 +40,3 @@ if parsed_event is not None:
     print(parsed_event.name)
     print(parsed_event.date)
     print(parsed_event.participants)
-    

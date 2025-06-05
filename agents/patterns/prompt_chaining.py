@@ -1,6 +1,6 @@
-import os
 from openai import AzureOpenAI
 from pydantic import BaseModel, Field
+from env_setup import env_vars
 import logging
 
 logging.basicConfig(
@@ -11,19 +11,10 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-model = "gpt-4o-mini-2"
-api_key = os.getenv("AZURE_OPENAI_API_KEY")
-azure_endpoint = os.getenv("AZURE_ENDPOINT")
-api_version = os.getenv("API_VERSION")
-
-if not azure_endpoint:
-    logger.critical("Azure endpoint is not set. Please check your .env file.")
-    raise ValueError(
-        "The value of azure endpoint is None. Please check your .env file."
-    )
-
 client = AzureOpenAI(
-    api_key=api_key, api_version=api_version, azure_endpoint=azure_endpoint
+    api_key=env_vars["api_key"],
+    api_version=env_vars["api_version"],
+    azure_endpoint=env_vars["azure_endpoint"],
 )
 
 """
@@ -77,7 +68,7 @@ def filter_mail(mail: EmailInput) -> FilteredEmail:
     )
     try:
         response = client.beta.chat.completions.parse(
-            model=model,
+            model=env_vars["model"],
             messages=[
                 {
                     "role": "system",
@@ -116,7 +107,7 @@ def get_cleaned_mail(mail: EmailInput) -> CleanedEmailOutput:
     logger.info(f"Starting cleaning process for email with subject: '{mail.subject}'")
     try:
         response = client.beta.chat.completions.parse(
-            model=model,
+            model=env_vars["model"],
             messages=[
                 {
                     "role": "system",
@@ -153,7 +144,7 @@ def summarise_mail(mail: CleanedEmailOutput) -> EmailSummaryOutput:
     logger.info("Starting summarization of cleaned email content.")
     try:
         response = client.beta.chat.completions.parse(
-            model=model,
+            model=env_vars["model"],
             messages=[
                 {
                     "role": "system",

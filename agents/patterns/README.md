@@ -1,7 +1,7 @@
 # AI Agent Patterns
 
 This directory contains implementations of effective AI agent patterns inspired by an article by Anthropic. 
-[Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) - Anthropic's blog post
+- [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)
 
 The following patterns are demonstrated:
 

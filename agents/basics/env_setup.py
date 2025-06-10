@@ -10,6 +10,3 @@ env_vars = {
     "azure_endpoint": os.getenv("AZURE_ENDPOINT"),
     "api_version": os.getenv("API_VERSION"),
 }
-
-
-env_vars["azure_endpoint"]

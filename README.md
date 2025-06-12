@@ -6,8 +6,8 @@ This repository demonstrates the implementation of intelligent agents using **pu
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/agents_in_python.git
-    cd agents_in_python
+    git clone https://github.com/TahirIqbal095/agent-lab.git
+    cd agent-lab
     ```
 
 2. **(Optional) Create a virtual environment:**
